@@ -1,44 +1,28 @@
-import {
-    Application,
-    DefaultTheme,
-    DefaultThemeRenderContext,
-    JSX,
-    Options,
-    PageEvent,
-    Reflection,
-    Renderer,
-    Router
-} from 'typedoc';
-
-class MyThemeContext extends DefaultThemeRenderContext {
-    constructor(router: Router, theme: DefaultTheme, page: PageEvent<Reflection>, options: Options) {
-        super(router, theme, page, options);
-
-        this.footer = () => (
-            <footer>
-                <p class="tsd-generator">
-                    Generated using{' '}
-                    <a href="https://typedoc.org/" target="_blank">
-                        TypeDoc
-                    </a>{' '}
-                    with{' '}
-                    <a href="https://github.com/jacobhumston/typedoc-neat-theme" target="_blank">
-                        typedoc-neat-theme
-                    </a>
-                    .
-                </p>
-            </footer>
-        );
-    }
-}
+import { Application, DefaultTheme, DefaultThemeRenderContext, JSX, PageEvent, Reflection, Renderer } from 'typedoc';
+import { MyThemeContext } from './context.js';
+import { icons } from './icons.js';
 
 class MyTheme extends DefaultTheme {
     constructor(renderer: Renderer) {
         super(renderer);
+
+        renderer.hooks.on('head.end', () => (
+            <link
+                rel="stylesheet"
+                href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+            />
+        ));
+
+        renderer.hooks.on('head.end', () => <link rel="stylesheet" href="./style.css"></link>);
     }
 
     render(page: PageEvent): string {
         this.application.logger.info(`Rendering ${page.url}`);
+
+        // icons
+        this.icons.search = () => icons.search;
+        this.icons[64] = () => icons.function;
+
         return super.render(page);
     }
 
