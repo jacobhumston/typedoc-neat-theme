@@ -18,5 +18,4 @@ node_modules/
 # Output of 'npm pack'
 *.tgz
 
-# Output of running `yarn typedoc src` on this repo
-docs
+

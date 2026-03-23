@@ -6,68 +6,47 @@ import {
     Options,
     PageEvent,
     Reflection,
-    RenderTemplate,
+    Renderer,
     Router
 } from 'typedoc';
 
-/**
- * A clone of the default theme, which prints a message when rendering each page.
- */
-export class LoggingTheme extends DefaultTheme {
+class MyThemeContext extends DefaultThemeRenderContext {
+    constructor(router: Router, theme: DefaultTheme, page: PageEvent<Reflection>, options: Options) {
+        super(router, theme, page, options);
+
+        this.footer = () => (
+            <footer>
+                <p class="tsd-generator">
+                    Generated using{' '}
+                    <a href="https://typedoc.org/" target="_blank">
+                        TypeDoc
+                    </a>{' '}
+                    with{' '}
+                    <a href="https://github.com/jacobhumston/typedoc-neat-theme" target="_blank">
+                        typedoc-neat-theme
+                    </a>
+                    .
+                </p>
+            </footer>
+        );
+    }
+}
+
+class MyTheme extends DefaultTheme {
+    constructor(renderer: Renderer) {
+        super(renderer);
+    }
+
     render(page: PageEvent): string {
         this.application.logger.info(`Rendering ${page.url}`);
         return super.render(page);
     }
-}
 
-/**
- * The theme context is where all of the partials live for rendering a theme,
- * in addition to some helper functions.
- */
-export class FooterOverrideThemeContext extends DefaultThemeRenderContext {
-    constructor(...args: ConstructorParameters<typeof DefaultThemeRenderContext>) {
-        super(...args);
-
-        const oldFooter = this.footer;
-
-        // Overridden methods must have `this` bound if they intend to use it.
-        // <JSX.Raw /> may be used to inject HTML directly.
-        this.footer = () => {
-            return (
-                <>
-                    {oldFooter()}
-                    <div class="container">
-                        <JSX.Raw html={this.markdown('Custom footer text, with **markdown** support!')} />
-                    </div>
-                </>
-            );
-        };
+    getRenderContext(pageEvent: PageEvent<Reflection>): DefaultThemeRenderContext {
+        return new MyThemeContext(this.router, this, pageEvent, this.application.options);
     }
 }
 
-/**
- * A near clone of the default theme, that adds some custom text after the footer.
- */
-export class FooterOverrideTheme extends DefaultTheme {
-    ContextClass = FooterOverrideThemeContext;
-}
-
-/**
- * Called by TypeDoc when loading this theme as a plugin. Should be used to define themes which
- * can be selected by the user.
- */
 export function load(app: Application) {
-    // Hooks can be used to inject some HTML without fully overwriting the theme.
-    app.renderer.hooks.on('body.begin', (_) => (
-        <script>
-            <JSX.Raw html="console.log(`Loaded ${location.href}`)" />
-        </script>
-    ));
-
-    // Or you can define a custom theme. This one behaves exactly like the default theme,
-    // but logs a message when rendering a page.
-    app.renderer.defineTheme('logging', LoggingTheme);
-
-    // While this one overwrites the footer to include custom content.
-    app.renderer.defineTheme('footer', FooterOverrideTheme);
+    app.renderer.defineTheme('typedoc-neat-theme', MyTheme);
 }

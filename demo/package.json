@@ -1,0 +1,21 @@
+{
+    "name": "typedoc-example",
+    "version": "0.0.0",
+    "private": true,
+    "description": "An example of using the TypeDoc documentation generator.",
+    "license": "Apache-2.0",
+    "author": "TypeDoc contributors",
+    "scripts": {
+        "lint": "eslint .",
+        "tsc": "tsc",
+        "typedoc": "node ../bin/typedoc"
+    },
+    "dependencies": {
+        "@types/lodash": "^4.17.23",
+        "@types/react": "^19.2.14",
+        "@types/react-dom": "^19.2.3",
+        "lodash": "^4.17.23",
+        "react": "^19.2.4",
+        "react-dom": "^19.2.4"
+    }
+}

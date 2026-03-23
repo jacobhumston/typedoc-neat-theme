@@ -14,7 +14,11 @@
     },
     "devDependencies": {
         "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
+        "@types/lodash": "^4.17.24",
+        "@types/react": "^19.2.14",
+        "lodash": "^4.17.23",
         "prettier": "^3.8.1",
+        "react": "^19.2.4",
         "typedoc": "^0.28.0",
         "typescript": "^5.8.2"
     },
@@ -24,7 +28,13 @@
     "scripts": {
         "build": "tsc",
         "predocs": "tsc",
-        "docs": "typedoc src --plugin ./dist/index.js",
+        "docs": "cd demo/ && typedoc",
         "format": "prettier --write --cache ."
-    }
+    },
+    "files": [
+        "src/",
+        "dist/",
+        "package.json",
+        "LICENSE"
+    ]
 }
