@@ -15,8 +15,10 @@
     "devDependencies": {
         "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
         "@types/lodash": "^4.17.24",
+        "@types/node": "^25.5.0",
         "@types/react": "^19.2.14",
         "@types/react-dom": "^19.2.3",
+        "cpy-cli": "^7.0.0",
         "lodash": "^4.17.23",
         "prettier": "^3.8.1",
         "react": "^19.2.4",
@@ -27,10 +29,10 @@
         "typedoc": "^0.28.0"
     },
     "scripts": {
-        "build": "tsc",
-        "predocs": "tsc",
-        "docs": "cd demo/ && typedoc",
-        "format": "prettier --write --cache ."
+        "build": "bun x cpy src/style.css dist/style.css && bun x tsc",
+        "predocs": "bun run build",
+        "docs": "cd demo/ && bun x typedoc",
+        "format": "bun x prettier --write --cache ."
     },
     "files": [
         "src/",
